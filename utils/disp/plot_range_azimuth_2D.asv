@@ -101,7 +101,7 @@ end
 
 radar_data_angle_range_dynamic = squeeze(sum(abs(radar_data_angle_range(:,indSel,:)),2));
 radar_data_angle_range_Static = squeeze(sum(abs(radar_data_angle_range(:,dopplerFFTSize/2+1,:)),2));
-radar_data_angle_range = squeeze(sum(abs(radar_data_angle_range),2));
+radar_data_angle_range = squeeze(sum(abs(radar_data_angle_range(:,indSel,:)),2));
 
 
 indices_1D = (minRangeBinKeep:n_range_fft_size-rightRangeBinDiscard);

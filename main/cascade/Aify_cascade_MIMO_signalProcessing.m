@@ -1,45 +1,6 @@
-%  Copyright (C) 2018 Texas Instruments Incorporated - http://www.ti.com/
-%
-%
-%   Redistribution and use in source and binary forms, with or without
-%   modification, are permitted provided that the following conditions
-%   are met:
-%
-%     Redistributions of source code must retain the above copyright
-%     notice, this list of conditions and the following disclaimer.
-%
-%     Redistributions in binary form must reproduce the above copyright
-%     notice, this list of conditions and the following disclaimer in the
-%     documentation and/or other materials provided with the
-%     distribution.
-%
-%     Neither the name of Texas Instruments Incorporated nor the names of
-%     its contributors may be used to endorse or promote products derived
-%     from this software without specific prior written permission.
-%
-%   THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
-%   "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
-%   LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR
-%   A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT
-%   OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
-%   SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT
-%   LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
-%   DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY
-%   THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-%   (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
-%   OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-%
-%
-
-% cascade_MIMO_signalProcessing.m
-%
-% Top level main test chain to process the raw ADC data. The processing
-% chain including adc data calibration module, range FFT module, DopplerFFT
-% module, CFAR module, DOA module. Each module is first initialized before
-% actually used in the chain.
-
-clearvars
-close all
+clear all;
+close all;
+clc;
 
 %处理结果是否需要画图展示
 PLOT_ON = 1; % 1: turn plot on; 0: turn plot off
@@ -55,8 +16,6 @@ PARAM_FILE_GEN_ON = 1;
 DISPLAY_RANGE_AZIMUTH_DYNAMIC_HEATMAP = 0 ; % Will make things slower
 %数据平台类型
 dataPlatform = 'TDA2';
-%是否存储中间过程图片
-SAVE_FIG_ON = 0;
 
 %% get the input path and testList
 %程序目录

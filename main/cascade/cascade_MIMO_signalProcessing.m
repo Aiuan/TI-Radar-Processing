@@ -50,7 +50,7 @@ DISPLAY_RANGE_AZIMUTH_DYNAMIC_HEATMAP = 0 ; % Will make things slower
 dataPlatform = 'TDA2'
 
 %% get the input path and testList
-pro_path = 'E:\matlab_workspace\202011毫米波雷达测试实验\MatlabExamples\4chip_cascade_MIMO_example';
+pro_path = getenv('CASCADE_SIGNAL_PROCESSING_CHAIN_MIMO');
 input_path = strcat(pro_path,'\main\cascade\input\');
 testList = strcat(input_path,'testList.txt');
 %path for input folder
@@ -102,7 +102,7 @@ while ~feof(fidList)
    % Get Unique File Idxs in the "dataFolder_test"   
    [fileIdx_unique] = getUniqueFileIdx(dataFolder_test);
     
-    for i_file = 1:2%(length(fileIdx_unique))
+    for i_file = 1:(length(fileIdx_unique))
         
        % Get File Names for the Master, Slave1, Slave2, Slave3   
        [fileNameStruct]= getBinFileNames_withIdx(dataFolder_test, fileIdx_unique{i_file});        
@@ -112,18 +112,15 @@ while ~feof(fidList)
         
       detection_results = [];  
         
-       % Get Valid Number of Frames
-       % 确定有多少有效帧，有效帧中数据大小
+       % Get Valid Number of Frames 
        [numValidFrames dataFileSize] = getValidNumFrames(fullfile(dataFolder_test, fileNameStruct.masterIdxFile));
         %intentionally skip the first frame due to TDA2 
        
-        %舍弃第一帧，从第二帧起始
         for frameIdx = 2:1:numValidFrames;%numFrames_toRun
             tic
             %read and calibrate raw ADC data            
             calibrationObj.frameIdx = frameIdx;
             frameCountGlobal = frameCountGlobal+1
-            %读取adc数据
             adcData = datapath(calibrationObj);
             
             % RX Channel re-ordering
@@ -272,7 +269,7 @@ while ~feof(fidList)
     if (DISPLAY_RANGE_AZIMUTH_DYNAMIC_HEATMAP)                   
     figure(2)
     subplot(121);
-    surf(y_axis, x_axis, (mag_data_static(:,:,frameCountGlobal)).^0.1,'EdgeColor','none');
+    surf(y_axis, x_axis, (mag_data_static(:,:,frameCountGlobal)).^0.4,'EdgeColor','none');
     view(2);
     xlabel('meters');    ylabel('meters')
     title({'Static Range-Azimuth Heatmap',strcat('Current Frame Number = ', num2str(frameCountGlobal))})
@@ -300,11 +297,9 @@ while ~feof(fidList)
     end
     
     ind = strfind(dataFolder_test, '\');
-    
-    date = dataFolder_test(ind(end-2)+1:(ind(end-1)-1));%日期
-    group = dataFolder_test(ind(end)+1:end);%组号
+    testName = dataFolder_test(ind(end-1)+1:(ind(end)-1));
     if SAVEOUTPUT_ON == 1
-        save(['.\output\', date,'_',group,'.mat'],'angles_all_all', 'detection_results_all','xyz_all');
+        save(['.\main\cascade\output\newOutput_',testName,'.mat'],'angles_all_all', 'detection_results_all','xyz_all');
     end
     testID = testID + 1;
     
