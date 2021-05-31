@@ -3,7 +3,7 @@ close all;
 clc;
 
 %% 加载图片文件，及时间戳
-imageFolder = dir('C:\Users\ai\Downloads\images\20210513mode1Group1');
+imageFolder = dir('K:\ourDataset\20210514\images\20210514mode1Group1');
 images = struct();
 for i = 3:size(imageFolder,1)
     idx = i-2;
@@ -15,22 +15,41 @@ end
 
 
 %% 运行参数设置
-
 % 设置想要检测的时段
-image_start_timestamp = 1620896520887750;
-image_end_timestamp = 1620896634681758;
+
+% image_start_timestamp = 1619619555539725;%0428mode3Group1环境地面杂波
+% image_end_timestamp = 1619619653492323;
+
+% image_start_timestamp = 1619619573156350;%0428mode3Group1单车被检测成2部分
+% image_end_timestamp = 1619619576340088;
+
+% image_start_timestamp = 1619619800523929;%0428mode3Group1车辆静止检测不到
+% image_end_timestamp = 1619619814356697;
+% image_start_timestamp = 1619619806196790;%0428mode3Group1车辆启动检测到
+% image_end_timestamp = 1619619814356697;
+
+% image_start_timestamp = 1620962777191675;%0514mode1Group1停车杂点少
+% image_end_timestamp = 1620962782662602;
+image_start_timestamp = 1620962782662602;%0514mode1Group1启动杂点多
+image_end_timestamp = 1620962782762864;
+
+
 image_start_timestamp = radarMatchImage(uint64(image_start_timestamp), images) ;
 image_end_timestamp = radarMatchImage(uint64(image_end_timestamp), images) ;
 
 % 等待按键
 KEY_ON = 1;
 % 残留帧
-NUM_RESERVE_FRAME = 1;
+NUM_RESERVE_FRAME = 10;
 
 %是否根据原始数据文件夹中的config.mmwave.json文件重新生成参数文件
 PARAM_FILE_GEN_ON = 1;
 %数据平台类型
 dataPlatform = 'TDA2';
+
+% 路测10FPS
+% 车载20FPS
+radar_FPS = 20;
 
 
 
@@ -59,7 +78,7 @@ while ~feof(fidList)%如果test.List文件不为空
     radar_startTime = fscanf(f_startTime, '%f');
     fclose(f_startTime);    
     radar_startTime = uint64(radar_startTime*1000000); %16位UNIX时间戳 
-    radar_FPS = 10;
+    
    
     %calibration file name
     dataFolder_calib = fgetl(fidList);%校准文件路径
@@ -101,10 +120,11 @@ while ~feof(fidList)%如果test.List文件不为空
     [fileIdx_unique] = getUniqueFileIdx(dataFolder_test);%得数据编号，一般为0000
    
      figure(1);
-     set(gcf,'units','normalized','outerposition',[0.1 0.1 0.8 0.8]);
+%      set(gcf,'units','normalized','outerposition',[0.1 0.1 0.8 0.8]);
+     set(gcf,'units','normalized','outerposition',[0 0 1 1]);
     
     
-    for i_file = 1:1%length(fileIdx_unique)%不是间隔采集模式，一般为length(fileIdx_unique)=1
+    for i_file = 1:length(fileIdx_unique)%不是间隔采集模式，一般为length(fileIdx_unique)=1
         
         % Get File Names for the Master, Slave1, Slave2, Slave3   
         [fileNameStruct]= getBinFileNames_withIdx(dataFolder_test, fileIdx_unique{i_file});%得到adc数据文件、idx数据文件的文件名        
@@ -248,8 +268,8 @@ while ~feof(fidList)%如果test.List文件不为空
                     c.Label.String = 'velocity (m/s)';
                     load('mycolormap.mat');
 %                     colormap(jet);
-                    colormap(colormap_white);
-%                     colormap(colormap_black);  
+%                     colormap(colormap_white);
+                    colormap(colormap_black);  
                     grid on;
                     xlabel('X (m)');
                     ylabel('Y (m)');
@@ -258,8 +278,17 @@ while ~feof(fidList)%如果test.List文件不为空
                     maxRangeShow = detectionObj.rangeBinSize*rangeFFTObj.rangeFFTSize;
                     xlim([-maxRangeShow maxRangeShow]);
                     ylim([0 maxRangeShow])%定义坐标系为y是雷达板正前方
-                    view([28 28]);                        
+%                     view([28 28]);  
+                    view([0 90]); 
                     title(' 3D point cloud');
+                    
+                    %投影点云至图像
+                    pixel_coordinate = projection(xyz, 3,75);
+                    subplot(2,2,1);
+                    hold on;
+                    scatter(pixel_coordinate(1,:),...
+                        pixel_coordinate(2,:),...
+                        70, pixel_coordinate(3,:), '.');
                     
                     
                     %绘制残留点云图 
@@ -288,8 +317,8 @@ while ~feof(fidList)%如果test.List文件不为空
                     axis('image'); 
                     xlim([-maxRangeShow maxRangeShow]);
                     ylim([0 maxRangeShow])%定义坐标系为y是雷达板正前方
-                    view([0 90]);                        
-                    title(' 3D point cloud');
+                    view([0 90]);              
+                    title(sprintf('%d consecutive frames of 3D point cloud: ', NUM_RESERVE_FRAME));
                     hold off;
                     
                     pause(0.1); 
