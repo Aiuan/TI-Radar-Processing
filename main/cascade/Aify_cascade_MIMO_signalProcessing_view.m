@@ -75,7 +75,7 @@ while ~feof(fidList)%如果test.List文件不为空
     f_startTime = fopen(fullfile(startTimefile.folder, startTimefile.name), 'r');
     startTime = fscanf(f_startTime, '%f');
     fclose(f_startTime);    
-    startTime = uint64(startTime*1000);%16位UNIX时间
+    startTime = uint64(startTime*1000000);%16位UNIX时间
     % 获取采集帧间隔时间(单位s)
     frameInterval = getPara(pathGenParaFile, 'framePeriodicty');
     
@@ -125,7 +125,7 @@ while ~feof(fidList)%如果test.List文件不为空
             if cnt_frameGlobal ==1 || isempty(timestamps{cnt_frameGlobal-1})
                 diff_timestamp = NaN;
             else
-                diff_timestamp = (timestamps{cnt_frameGlobal} - timestamps{cnt_frameGlobal-1})/1000;
+                diff_timestamp = double(timestamps{cnt_frameGlobal} - timestamps{cnt_frameGlobal-1})/1000;
             end
             fprintf('毫米波雷达时间戳 %d，与上一帧间隔 %.3f ms\n', timestamps{cnt_frameGlobal}, diff_timestamp);
             %pc_timestamp
@@ -133,7 +133,7 @@ while ~feof(fidList)%如果test.List文件不为空
             if cnt_frameGlobal ==1 || isempty(pc_timestamps{cnt_frameGlobal-1})
                 diff_timestamp = NaN;
             else
-                diff_timestamp = (pc_timestamps{cnt_frameGlobal} - pc_timestamps{cnt_frameGlobal-1})/1000;
+                diff_timestamp = double(pc_timestamps{cnt_frameGlobal} - pc_timestamps{cnt_frameGlobal-1})/1000;
             end
             fprintf('PC端时间戳 %d，与上一帧间隔 %.3f ms\n', pc_timestamps{cnt_frameGlobal}, diff_timestamp);
             

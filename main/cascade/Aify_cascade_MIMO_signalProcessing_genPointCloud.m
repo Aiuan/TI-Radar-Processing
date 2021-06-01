@@ -9,7 +9,7 @@ numFrames_toRun = inf;
 PARAM_FILE_GEN_ON = 1;
 %保存
 SAVEOUTPUT_ON = 1;
-SAVE_NAME = '20210428mode3Group1';
+SAVE_NAME = 'test';
 
 %数据平台类型
 dataPlatform = 'TDA2';
@@ -65,10 +65,10 @@ while ~feof(fidList)%如果test.List文件不为空
     f_startTime = fopen(fullfile(startTimefile.folder, startTimefile.name), 'r');
     startTime = fscanf(f_startTime, '%f');
     fclose(f_startTime);    
-    startTime = uint64(startTime*1000);%16位UNIX时间
+    startTime = uint64(startTime*1000000);%16位UNIX时间
     % 获取采集帧间隔时间(单位s)
     frameInterval = getPara(pathGenParaFile, 'framePeriodicty');
-    
+    radar_fps = 1/frameInterval;
     
     %获得数据分片数，例：0000, 0001, 0002...   
     [fileIdx_unique] = getUniqueFileIdx(dataFolder_test);    
@@ -107,8 +107,21 @@ while ~feof(fidList)%如果test.List文件不为空
             adcData = adcData(:,:,calibrationObj.RxForMIMOProcess,:);
             
             % timestamp
-            timestamps{cnt_frameGlobal} = getTimestamp(fullfile(dataFolder_test, fileNameStruct.masterIdxFile), frameIdx);
+            radar_timestamps{cnt_frameGlobal} = getTimestamp(fullfile(dataFolder_test, fileNameStruct.masterIdxFile), frameIdx);
+            if cnt_frameGlobal ==1 || isempty(radar_timestamps{cnt_frameGlobal-1})
+                diff_timestamp = NaN;
+            else
+                diff_timestamp = double(radar_timestamps{cnt_frameGlobal} - radar_timestamps{cnt_frameGlobal-1})/1000;
+            end
+            fprintf('雷达端时间戳 %d，与上一帧间隔 %.3f ms\n', radar_timestamps{cnt_frameGlobal}, diff_timestamp);
+            
             pc_timestamps{cnt_frameGlobal} = startTime + (cnt_frameGlobal-1)*frameInterval*1000000;%16位UNIX时间
+            if cnt_frameGlobal ==1 || isempty(pc_timestamps{cnt_frameGlobal-1})
+                diff_timestamp = NaN;
+            else
+                diff_timestamp = double(pc_timestamps{cnt_frameGlobal} - pc_timestamps{cnt_frameGlobal-1})/1000;
+            end
+            fprintf('电脑端时间戳 %.6f，与上一帧间隔 %.3f ms\n', double(pc_timestamps{cnt_frameGlobal})/1e6, diff_timestamp);
             
             time = toc;
             disp(['读取耗时 ',num2str(time), 's']);
@@ -189,7 +202,7 @@ while ~feof(fidList)%如果test.List文件不为空
     %============================保存数据环节==========================================
     if SAVEOUTPUT_ON == 1
         %保存的数据为               
-        save(['.\output\', SAVE_NAME, '.mat'], 'timestamps', 'pc_timestamps', 'xyz_all', 'startTime', 'cnt_processed', 'cnt_frameGlobal', 'set_capture_frames');
+        save(['.\output\', SAVE_NAME, '.mat'], 'radar_timestamps', 'pc_timestamps', 'xyz_all', 'startTime', 'cnt_processed', 'cnt_frameGlobal', 'set_capture_frames', 'radar_fps');
     end
     %============================================================================
     testID = testID + 1;

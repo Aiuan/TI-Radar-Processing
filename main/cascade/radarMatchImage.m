@@ -1,18 +1,38 @@
-function [imageTimestamp, imagePath] = radarMatchImage(radarTimestamp, image)
+% aifuyuan create 20210601
+% match radar pointClouds with image
+% input: 1.radar frame's timestamp
+%           2.images struct
+% output: 1.matched image's timestamp
+%             2.matched image's path
+function [imageTimestamp, imagePath] = radarMatchImage(radarTimestamp, images)
     
-    idx_latter = 1;
-    while(radarTimestamp > image(idx_latter).timestamp)
-        idx_latter = idx_latter + 1;
-    end
-    idx_former = max(idx_latter - 1, 1);
-    
-    diff_former = radarTimestamp - image(idx_former).timestamp;
-    diff_latter = image(idx_latter).timestamp - radarTimestamp;
-    if (diff_former >= diff_latter)
-        imageTimestamp = image(idx_latter).timestamp;
-        imagePath = image(idx_latter).path;
+    if radarTimestamp<=images(1).timestamp
+        % radarTimestamp___images(1).timestamp
+        imageTimestamp = images(1).timestamp;
+        imagePath = images(1).path;
+    elseif radarTimestamp>=images(end).timestamp
+        % images(end).timestamp___radarTimestamp
+        imageTimestamp = images(end).timestamp;
+        imagePath = images(end).path;
     else
-        imageTimestamp = image(idx_former).timestamp;
-        imagePath = image(idx_former).path;
+        % idx_former___radarTimestamp___idx_latter
+        idx_former = 1;
+        idx_latter = 2;
+        while(radarTimestamp > images(idx_latter).timestamp)
+            idx_former = idx_former + 1;
+            idx_latter = idx_latter + 1;
+        end
+        if (radarTimestamp - images(idx_former).timestamp) < (images(idx_latter).timestamp - radarTimestamp)
+            % idx_former__radarTimestamp__________idx_latter
+            imageTimestamp = images(idx_former).timestamp;
+            imagePath = images(idx_former).path;
+        else
+            % idx_former__________radarTimestamp__idx_latter
+            imageTimestamp = images(idx_latter).timestamp;
+            imagePath = images(idx_latter).path;
+        end
+        
     end
+
+    
 end
