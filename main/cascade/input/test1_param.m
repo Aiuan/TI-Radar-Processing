@@ -226,29 +226,88 @@ DopplerProcClutterRemove_clutterRemove       = 0;                        %1=enab
 
 
 %% detection parameters
+%% CFAR_CASO
+% ind = find(D(:,2)==0);
+% [val ID_unique] = unique(D(ind,1));
+% antenna_azimuthonly = ind(ID_unique); %virtual channel ID only for unique azimuth ID
+% 
+% CFAR_CASO_enable             = 1;
+% CFAR_CASO_detectMethod       = 1;                %(CASO-CFAR)dualpass rng/dop; only support one CFAR method
+% CFAR_CASO_numAntenna         = numVirtualRxAnt; %number of antennas
+% CFAR_CASO_refWinSize         = [8, 4];          % number of reference cells to estimate noise variance
+% CFAR_CASO_guardWinSize       = [8, 0];           % number of gap cells to prevent leakage being detected as signal
+% CFAR_CASO_K0                 = [5 3];       % Threshold scaling factor -- 6.3 corresponds to SNR of 8dB
+% CFAR_CASO_maxEnable          = 0;                %1: detect only if it is the maximum within window; 0: otherwise
+% CFAR_CASO_ratio_OS           = 0.65;             % percentage used to determine noise level used for detection
+% CFAR_CASO_rangeBinSize    = rangeBinSize;
+% CFAR_CASO_velocityBinSize  = velocityBinSize;
+% CFAR_CASO_dopplerFFTSize     = DopplerFFTSize;   % Doppler FFT size
+% CFAR_CASO_powerThre          = 0;                % if power of detected signal is less than this level, drop off this object.
+% CFAR_CASO_discardCellLeft    = 10;                % Number of range bins to discard due to distortions around DC (positive frequencies)
+% CFAR_CASO_discardCellRight   = 20;               % Number of range bins to discard due to distortions around DC (negative frequencies)
+% CFAR_CASO_numRxAnt           = length(RxForMIMOProcess);
+% CFAR_CASO_TDM_MIMO_numTX     = length(TxForMIMOProcess);
+% CFAR_CASO_antenna_azimuthonly = antenna_azimuthonly; %virtual channel ID only for unique azimuth ID
+% CFAR_CASO_minDisApplyVmaxExtend = 10; % meter, within this range, do not apply max velocity extension
+% CFAR_CASO_applyVmaxExtend = 0;
+% 
+% %find the overlap antenna ID that can be used for phase compensation
+% TX_ID_MIMO = repmat(1:length(TxForMIMOProcess),length(RxForMIMOProcess),1);
+% TX_ID_MIMO = TX_ID_MIMO(:);
+% sumTwo = D(:,1)*10 + D(:,2);
+% [val id] = unique(sumTwo);
+% id_repeat = setxor(id, 1:length(sumTwo));
+% 
+% overlapAntenna_ID = [];
+% %found the overlap antenna ID
+% 
+% for ii = 1:length(id_repeat)
+%     %ID of pair
+%     overlapAntenna_ID(ii,1:2) = find(sumTwo == sumTwo(id_repeat(ii)));
+%     %associated TX of each pair
+%     overlapAntenna_ID(ii,3:4) =TX_ID_MIMO(overlapAntenna_ID(ii,1:2));
+% end
+% 
+% if length(overlapAntenna_ID) > 0
+%     %find the pairs offset only by 1 chirp/TX in time
+%     dif_TX = abs(overlapAntenna_ID(:,3) - overlapAntenna_ID(:,4));
+%     ID_dif_1TX = find((dif_TX) == 1 );
+%     CFAR_CASO_overlapAntenna_ID = overlapAntenna_ID(ID_dif_1TX,:);
+%     ID_dif_2TX = find(dif_TX == 2);
+%     CFAR_CASO_overlapAntenna_ID_2TX = overlapAntenna_ID(ID_dif_2TX,:);
+%     ID_dif_3TX = find(dif_TX == 3);
+%     CFAR_CASO_overlapAntenna_ID_3TX = overlapAntenna_ID(ID_dif_3TX,:);
+% else
+%     CFAR_CASO_overlapAntenna_ID = [];
+%     CFAR_CASO_overlapAntenna_ID_2TX = [];
+%     CFAR_CASO_overlapAntenna_ID_3TX = [];
+%     
+% end
+
+%% CFAR_OS
 ind = find(D(:,2)==0);
 [val ID_unique] = unique(D(ind,1));
 antenna_azimuthonly = ind(ID_unique); %virtual channel ID only for unique azimuth ID
 
-CFAR_CASO_enable             = 1;
-CFAR_CASO_detectMethod       = 1;                %(CASO-CFAR)dualpass rng/dop; only support one CFAR method
-CFAR_CASO_numAntenna         = numVirtualRxAnt; %number of antennas
-CFAR_CASO_refWinSize         = [8, 4];          % number of reference cells to estimate noise variance
-CFAR_CASO_guardWinSize       = [8, 0];           % number of gap cells to prevent leakage being detected as signal
-CFAR_CASO_K0                 = [5 3];       % Threshold scaling factor -- 6.3 corresponds to SNR of 8dB
-CFAR_CASO_maxEnable          = 0;                %1: detect only if it is the maximum within window; 0: otherwise
-CFAR_CASO_ratio_OS           = 0.65;             % percentage used to determine noise level used for detection
-CFAR_CASO_rangeBinSize    = rangeBinSize;
-CFAR_CASO_velocityBinSize  = velocityBinSize;
-CFAR_CASO_dopplerFFTSize     = DopplerFFTSize;   % Doppler FFT size
-CFAR_CASO_powerThre          = 0;                % if power of detected signal is less than this level, drop off this object.
-CFAR_CASO_discardCellLeft    = 10;                % Number of range bins to discard due to distortions around DC (positive frequencies)
-CFAR_CASO_discardCellRight   = 20;               % Number of range bins to discard due to distortions around DC (negative frequencies)
-CFAR_CASO_numRxAnt           = length(RxForMIMOProcess);
-CFAR_CASO_TDM_MIMO_numTX     = length(TxForMIMOProcess);
-CFAR_CASO_antenna_azimuthonly = antenna_azimuthonly; %virtual channel ID only for unique azimuth ID
-CFAR_CASO_minDisApplyVmaxExtend = 10; % meter, within this range, do not apply max velocity extension
-CFAR_CASO_applyVmaxExtend = 0;
+CFAR_OS_enable             = 1;
+CFAR_OS_detectMethod       = 1;                %(CASO-CFAR)dualpass rng/dop; only support one CFAR method
+CFAR_OS_numAntenna         = numVirtualRxAnt; %number of antennas
+CFAR_OS_refWinSize         = [8, 4];          % number of reference cells to estimate noise variance
+CFAR_OS_guardWinSize       = [8, 0];           % number of gap cells to prevent leakage being detected as signal
+CFAR_OS_K0                 = [5 0.5];       % Threshold scaling factor -- [5 3] corresponds to SNR of 8dB
+CFAR_OS_maxEnable          = 0;                %1: detect only if it is the maximum within window; 0: otherwise
+CFAR_OS_ratio_OS           = 0.65;             % percentage used to determine noise level used for detection
+CFAR_OS_rangeBinSize    = rangeBinSize;
+CFAR_OS_velocityBinSize  = velocityBinSize;
+CFAR_OS_dopplerFFTSize     = DopplerFFTSize;   % Doppler FFT size
+CFAR_OS_powerThre          = 0;                % if power of detected signal is less than this level, drop off this object.
+CFAR_OS_discardCellLeft    = 10;                % Number of range bins to discard due to distortions around DC (positive frequencies)
+CFAR_OS_discardCellRight   = 20;               % Number of range bins to discard due to distortions around DC (negative frequencies)
+CFAR_OS_numRxAnt           = length(RxForMIMOProcess);
+CFAR_OS_TDM_MIMO_numTX     = length(TxForMIMOProcess);
+CFAR_OS_antenna_azimuthonly = antenna_azimuthonly; %virtual channel ID only for unique azimuth ID
+CFAR_OS_minDisApplyVmaxExtend = 10; % meter, within this range, do not apply max velocity extension
+CFAR_OS_applyVmaxExtend = 0;
 
 %find the overlap antenna ID that can be used for phase compensation
 TX_ID_MIMO = repmat(1:length(TxForMIMOProcess),length(RxForMIMOProcess),1);
@@ -271,15 +330,15 @@ if length(overlapAntenna_ID) > 0
     %find the pairs offset only by 1 chirp/TX in time
     dif_TX = abs(overlapAntenna_ID(:,3) - overlapAntenna_ID(:,4));
     ID_dif_1TX = find((dif_TX) == 1 );
-    CFAR_CASO_overlapAntenna_ID = overlapAntenna_ID(ID_dif_1TX,:);
+    CFAR_OS_overlapAntenna_ID = overlapAntenna_ID(ID_dif_1TX,:);
     ID_dif_2TX = find(dif_TX == 2);
-    CFAR_CASO_overlapAntenna_ID_2TX = overlapAntenna_ID(ID_dif_2TX,:);
+    CFAR_OS_overlapAntenna_ID_2TX = overlapAntenna_ID(ID_dif_2TX,:);
     ID_dif_3TX = find(dif_TX == 3);
-    CFAR_CASO_overlapAntenna_ID_3TX = overlapAntenna_ID(ID_dif_3TX,:);
+    CFAR_OS_overlapAntenna_ID_3TX = overlapAntenna_ID(ID_dif_3TX,:);
 else
-    CFAR_CASO_overlapAntenna_ID = [];
-    CFAR_CASO_overlapAntenna_ID_2TX = [];
-    CFAR_CASO_overlapAntenna_ID_3TX = [];
+    CFAR_OS_overlapAntenna_ID = [];
+    CFAR_OS_overlapAntenna_ID_2TX = [];
+    CFAR_OS_overlapAntenna_ID_3TX = [];
     
 end
 

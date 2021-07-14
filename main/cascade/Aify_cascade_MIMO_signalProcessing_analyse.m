@@ -8,8 +8,8 @@ clc;
 imagePath = 'K:\ourDataset\20210428\images\20210428mode3Group1';
 
 % ========================设置想要观察的时段====================
-% imageTimestamp_start = 0;
-% imageTimestamp_end = inf;
+imageTimestamp_start = 0;
+imageTimestamp_end = inf;
 
 % imageTimestamp_start = 1619619555539725;%0428mode3Group1环境地面杂波
 % imageTimestamp_end = 1619619653492323;
@@ -18,9 +18,9 @@ imagePath = 'K:\ourDataset\20210428\images\20210428mode3Group1';
 % imageTimestamp_end = 1619619576340088;
 
 % imageTimestamp_start = 1619619797524763;%0428mode3Group1车辆速度模糊
-imageTimestamp_start = 1619619800917161;%0428mode3Group1车辆速度模糊：部分模糊
+% imageTimestamp_start = 1619619800917161;%0428mode3Group1车辆速度模糊：部分模糊
 % imageTimestamp_start = 1619619800523929;%0428mode3Group1车辆静止检测不到，车辆速度模糊：完全模糊
-imageTimestamp_end = 1619619814356697;
+% imageTimestamp_end = 1619619814356697;
 % imageTimestamp_start = 1619619806196790;%0428mode3Group1车辆启动检测到
 % imageTimestamp_end = 1619619814356697;
 
@@ -46,7 +46,7 @@ numFrames_toRun = inf;
 %是否根据原始数据文件夹中的config.mmwave.json文件重新生成参数文件
 PARAM_FILE_GEN_ON = 1;
 % 等待按键
-KEY_ON = 1;
+KEY_ON = 0;
 % 残留帧
 NUM_RESERVE_FRAME = 10;
 
@@ -102,7 +102,8 @@ while ~feof(fidList)%如果test.List文件不为空
     calibrationObj      = calibrationCascade('pfile', pathGenParaFile, 'calibrationfilePath', dataFolder_calib);
     rangeFFTObj         = rangeProcCascade('pfile', pathGenParaFile);%内含如何对数据进行rangeFFT处理
     DopplerFFTObj       = DopplerProcClutterRemove('pfile', pathGenParaFile);%内含如何对数据进行DopplerFFT处理
-    detectionObj        = CFAR_CASO('pfile', pathGenParaFile);%内含通过angleFFT 和 CFAR算法的detection结果
+%     detectionObj        = CFAR_CASO('pfile', pathGenParaFile);%CFAR_CASO算法
+    detectionObj        = CFAR_OS('pfile', pathGenParaFile);%CFAR_OS算法
     DOAObj              = DOACascade('pfile', pathGenParaFile);
     
     platform = simTopObj.platform;%使用平台类型

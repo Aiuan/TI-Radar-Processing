@@ -60,7 +60,8 @@ while ~feof(fidList)%如果test.List文件不为空
     calibrationObj      = calibrationCascade('pfile', pathGenParaFile, 'calibrationfilePath', dataFolder_calib);
     rangeFFTObj         = rangeProcCascade('pfile', pathGenParaFile);%内含如何对数据进行rangeFFT处理
     DopplerFFTObj       = DopplerProcClutterRemove('pfile', pathGenParaFile);%内含如何对数据进行DopplerFFT处理
-    detectionObj        = CFAR_CASO('pfile', pathGenParaFile);%内含通过angleFFT 和 CFAR算法的detection结果
+    %     detectionObj        = CFAR_CASO('pfile', pathGenParaFile);%CFAR_CASO算法
+    detectionObj        = CFAR_OS('pfile', pathGenParaFile);%CFAR_OS算法
     DOAObj              = DOACascade('pfile', pathGenParaFile);
     
     platform = simTopObj.platform;%使用平台类型
