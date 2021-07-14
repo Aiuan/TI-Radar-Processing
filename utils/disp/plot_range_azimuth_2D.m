@@ -162,13 +162,13 @@ if PLOT_ON
             surf(y_axis, x_axis, abs(mag_data),'EdgeColor','none');
         end
     end
-    % 调整色轴
-    caxis([min(min(abs((mag_data_static).^0.1))), max(max(abs((mag_data_static).^0.1)))]);
+%     % 调整色轴
+%     caxis([min(min(abs((mag_data_static).^0.1))), max(max(abs((mag_data_static).^0.1)))]);
     
     view(2);
     xlabel('meters');
     ylabel('meters');
-    colormap('jet');
+%     colormap('jet');
     
 end
 end

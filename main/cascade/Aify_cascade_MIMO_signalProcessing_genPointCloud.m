@@ -140,9 +140,12 @@ while ~feof(fidList)%如果test.List文件不为空
                 DopplerFFTOut(:,:,:,i_tx)   = datapath(DopplerFFTObj, rangeFFTOut(:,:,:,i_tx));%进行DopplerFFT处理，datapath位于module：DopplerProc
             end
             
+            velocityList = (-size(DopplerFFTOut,2)/2: size(DopplerFFTOut,2)/2-1) * detectionObj.velocityBinSize;
+            rangeList = (1: size(rangeFFTOut,1)) * detectionObj.rangeBinSize;    
+            
             % 转化为虚拟天线形式，维度（每个Chirp中的采样点数，每根天线发射的chirp数量，虚拟天线数量 ）
             DopplerFFTOut = reshape(DopplerFFTOut,size(DopplerFFTOut,1), size(DopplerFFTOut,2), size(DopplerFFTOut,3)*size(DopplerFFTOut,4));
-             
+            
             % CFAR done along only TX and RX used in MIMO array
             % 进行detection（CFAR）处理，datapath位于module：detection
             detection_results = datapath(detectionObj, DopplerFFTOut);
@@ -202,7 +205,9 @@ while ~feof(fidList)%如果test.List文件不为空
     %============================保存数据环节==========================================
     if SAVEOUTPUT_ON == 1
         %保存的数据为               
-        save(['.\output\', SAVE_NAME, '.mat'], 'radar_timestamps', 'pc_timestamps', 'xyz_all', 'startTime', 'cnt_processed', 'cnt_frameGlobal', 'set_capture_frames', 'radar_fps');
+        save(['.\output\', SAVE_NAME, '.mat'], 'radar_timestamps', 'pc_timestamps', 'xyz_all', 'startTime'...
+            , 'cnt_processed', 'cnt_frameGlobal', 'set_capture_frames', 'radar_fps'...
+            , 'rangeList', 'velocityList');
     end
     %============================================================================
     testID = testID + 1;

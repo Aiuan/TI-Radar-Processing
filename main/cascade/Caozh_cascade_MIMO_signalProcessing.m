@@ -1,5 +1,5 @@
 clearvars
-close all;
+% close all;
 clc;
 
 %处理结果是否需要画图展示
@@ -19,11 +19,11 @@ dataPlatform = 'TDA2';
 
 %% get the input path and testList
 %程序目录
-pro_path = 'D:\matlab_workspace\毫米波雷达后处理程序\MatlabExamples\4chip_cascade_MIMO_example';
+pro_path = 'D:\matlab_workspace\mmWaveProcessing\MatlabExamples\4chip_cascade_MIMO_example';
 %input文件夹目录
 input_path = strcat(pro_path,'\main\cascade\input\');
 %描述待处理数据文件目录
-testList = strcat(input_path,'testList.txt');
+testList = strcat(input_path,'testList_caozh.txt');
 %打开testList.txt文件
 fidList = fopen(testList,'r');
 %作为生成参数文件的编号

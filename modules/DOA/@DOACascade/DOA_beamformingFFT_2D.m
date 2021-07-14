@@ -69,9 +69,9 @@ apertureLen_elev = max(D(:,2));
 sig_2D = zeros(apertureLen_azim,apertureLen_elev);
 for i_line = 1:apertureLen_elev
     ind = find(D(:,2) == i_line);
-    D_sel = D(ind,1);
-    sig_sel = sig(ind);
-    [val indU] = unique(D_sel);
+    D_sel = D(ind,1);%azi_position, when ele_position == i_line
+    sig_sel = sig(ind);%value, when ele_position == i_line
+    [val indU] = unique(D_sel);%val is nonredundant azi_position; indU is index
     
     sig_2D(D_sel(indU),i_line) = sig_sel(indU);
     

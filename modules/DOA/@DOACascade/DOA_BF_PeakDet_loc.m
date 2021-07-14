@@ -57,7 +57,7 @@ maxVal = 0;
 maxLoc = 0;
 maxData = [];
 
-locateMax = 0;  % at beginning, not ready for peak detection
+locateMax = 0;  % at beginning, not ready for peak detection遇见满足条件的峰值启动开关，与参数gamma有关
 km = 1;         % constant value used in variance calculation
 
 numMax = 0;
@@ -104,6 +104,11 @@ while (i < (N + extendLoc - 1))
             % gamma, thereby declaring that the min value was a valley
             locateMax = 1;
             maxVal = currentVal;
+            
+            % aifuyuan add 20210608
+            maxLoc = i_loc;
+            maxLoc_r = i;
+            
             if (initStage == 1)
                 extendLoc = i;
                 initStage = 0;

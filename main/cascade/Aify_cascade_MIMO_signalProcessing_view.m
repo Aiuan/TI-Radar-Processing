@@ -30,7 +30,7 @@ dataPlatform = 'TDA2';
 %input文件夹目录
 input_path = strcat(pwd,'\input\');
 %描述待处理数据文件目录
-testList = strcat(input_path,'testList.txt');
+testList = strcat(input_path,'testList_view.txt');
 %打开testList.txt文件
 fidList = fopen(testList,'r');
 %生成雷达参数文件的编号
@@ -270,18 +270,24 @@ while ~feof(fidList)%如果test.List文件不为空
                         %定义坐标系为y是雷达板正前方
                         scatter3(xyz(moveID,1), xyz(moveID,2), xyz(moveID,3), 10, (xyz(moveID,4)),'filled');%x,y,z,doppler_corr
                         c = colorbar;
-                        c.Label.String = 'velocity (m/s)';                        
+                        c.Label.String = 'velocity (m/s)';
+                        set(gca, 'CLim', [velocityList(1), velocityList(end)]);
                         grid on;
-                        %xlim([-20 20])
-                        %ylim([1 maxRangeShow])
-                        %zlim([-4 4])
                         xlabel('X (m)');
                         ylabel('Y (m)');
                         zlabel('Z (m)');
                         axis('image');
+                        xlim([-rangeList(end) rangeList(end)]);
+                        ylim([0 rangeList(end)]);
+                        zlim([-4 4]);
                         colormap('jet');
                         view([0 90]);                        
-                        title(' 3D point cloud');
+                        title('3D point cloud');
+                        subplot(2,2,4,'color', [0.8,0.8,0.8]);
+                        hold on;
+                        xyz_zero = xyz(xyz(moveID,4)==0, :);
+                        scatter3(xyz_zero(:,1), xyz_zero(:,2), xyz_zero(:,3), 10, (xyz_zero(:,4)),'w', 'filled');
+                        hold off;
                         
                         %plot range and azimuth heatmap
                         subplot(2,2,3)%绘制静态目标，range和azimuth热力图

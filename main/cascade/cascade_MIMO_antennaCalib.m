@@ -43,14 +43,14 @@ clearvars
 close all
 
 
-pro_path = 'D:\matlab_workspace\毫米波雷达后处理程序\MatlabExamples\4chip_cascade_MIMO_example';
+pro_path = 'D:\matlab_workspace\mmWaveProcessing\MatlabExamples\4chip_cascade_MIMO_example';
 input_path = strcat(pro_path,'\main\cascade\input\');
 dataPlatform = 'TDA2';
 
 
 % dataFolder_calib_data = '.\main\cascade\testVector\test1\';
 %校准数据路径
-dataFolder_calib_data = 'D:\ti\mmwave_studio_03_00_00_14\mmWaveStudio\PostProc\mode3Calib';
+dataFolder_calib_data = 'D:\ti\mmwave_studio_03_00_00_14\mmWaveStudio\PostProc\czhCalib1';
 targetRange = 5; %target aproximate distance for local maximum search
 
 %parameter file name for the test
@@ -78,7 +78,7 @@ end
 %calibrateValFileNameSave: file name to save calibration results. This file
 %will be saved in "dataFolder_calib" after running calibration
 %保存参数mat名称
-calibrateValFileNameSave =[input_path '\20210514.mat'];
+calibrateValFileNameSave =[input_path '\20210626czhMode1.mat'];
 
 %use second frame for calibration 
 genCalibrationMatrixObj.frameIdx = 2;
