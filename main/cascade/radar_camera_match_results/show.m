@@ -1,4 +1,4 @@
-%% æŸ¥çœ‹è¯¯å·®ç›´æ–¹å›¾
+%% Îó²îÖ±·½Í¼
 clear all; close all; clc;
 
 load calibdata
@@ -21,7 +21,7 @@ sum(error)
 bar(error);
 grid on;
 
-%% é€å¼ æ£€æŸ¥
+%% ÖğÖ¡¼ì²é
 clear all; close all; clc;
 
 load calibdata
