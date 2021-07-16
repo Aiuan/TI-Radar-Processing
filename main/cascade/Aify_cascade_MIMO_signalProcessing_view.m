@@ -7,11 +7,11 @@ clc;
 %运行帧数
 numFrames_toRun = inf; %number of frame to run, can be less than the frame saved in the raw data
 %是否舍弃第一帧，由于第一帧质量不佳，TI官方建议舍弃第一帧
-abandonFirstFrame_ON = 0;
+abandonFirstFrame_ON = 1;
 %按键下一帧功能
 KEY_ON = 1;% 1: on; 0:off
 %打印点云信息
-PRINT_INFO_ON = 0;
+PRINT_INFO_ON = 1;
 
 %是否根据原始数据文件夹中的config.mmwave.json文件重新生成参数文件
 PARAM_FILE_GEN_ON = 1;
