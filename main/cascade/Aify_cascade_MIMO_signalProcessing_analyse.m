@@ -5,11 +5,11 @@ clc;
 %% 参数设置
 
 % 相机数据目录
-imagePath = 'K:\ourDataset\20210715\images\20210715mode1Group1';
+imagePath = 'F:\mmwaveData\20210428\images\20210428mode3Group1';
 
 % ========================设置想要观察的时段====================
-imageTimestamp_start = 0;
-imageTimestamp_end = inf;
+% imageTimestamp_start = 0;
+% imageTimestamp_end = inf;
 
 % imageTimestamp_start = 1619619555539725;%0428mode3Group1环境地面杂波
 % imageTimestamp_end = 1619619653492323;
@@ -18,9 +18,9 @@ imageTimestamp_end = inf;
 % imageTimestamp_end = 1619619576340088;
 
 % imageTimestamp_start = 1619619797524763;%0428mode3Group1车辆速度模糊
-% imageTimestamp_start = 1619619800917161;%0428mode3Group1车辆速度模糊：部分模糊
+imageTimestamp_start = 1619619800917161;%0428mode3Group1车辆速度模糊：部分模糊
 % imageTimestamp_start = 1619619800523929;%0428mode3Group1车辆静止检测不到，车辆速度模糊：完全模糊
-% imageTimestamp_end = 1619619814356697;
+imageTimestamp_end = 1619619814356697;
 % imageTimestamp_start = 1619619806196790;%0428mode3Group1车辆启动检测到
 % imageTimestamp_end = 1619619814356697;
 
@@ -76,7 +76,7 @@ imageTimestamp_end = radarMatchImage(uint64(imageTimestamp_end), images) ;
 %input文件夹目录
 input_path = strcat(pwd,'\input\');
 %描述待处理数据文件目录
-testList = strcat(input_path,'testList.txt');
+testList = strcat(input_path,'testList_analyse.txt');
 %打开testList.txt文件
 fidList = fopen(testList,'r');
 %生成雷达参数文件的编号
@@ -345,7 +345,7 @@ while ~feof(fidList)%如果test.List文件不为空
                     hold off;
                     
                     % 显示对应图片 + 投影点云至图像
-                    remove_distance_min = 3;
+                    remove_distance_min = 10;
                     remove_distance_max = 75;
                     pixel_coordinate = projection(xyz, radar_camera_matchMatrix, remove_distance_min, remove_distance_max);
                     subplot(2,3,1);
@@ -373,8 +373,10 @@ while ~feof(fidList)%如果test.List文件不为空
                     subplot(2,3,2);
                     for reserve_frameId = 1:size(constant_pointClouds,2)
                         xyz = constant_pointClouds{reserve_frameId};
-                        scatter3(xyz(:,1),xyz(:,2),-xyz(:,3),10,(xyz(:,4)),'filled');
+                        scatter3(xyz(:,1),xyz(:,2),xyz(:,3),10,(xyz(:,4)),'filled');
                         hold on;
+                        xyz_zero = xyz(xyz(:,4)==0, :);
+                        scatter3(xyz_zero(:,1), xyz_zero(:,2), xyz_zero(:,3), 10, (xyz_zero(:,4)),'w', 'filled');
                     end
                     c = colorbar;
                     caxis([-detectionObj.dopplerFFTSize/2*detectionObj.velocityBinSize, (detectionObj.dopplerFFTSize/2-1)*detectionObj.velocityBinSize]);
@@ -392,15 +394,11 @@ while ~feof(fidList)%如果test.List文件不为空
                     title(sprintf('%d 帧聚合点云图: ', NUM_RESERVE_FRAME));
                     hold off;
                     subplot(2,3,2,'color', [0.8,0.8,0.8]);
-                    hold on;
-                    xyz_zero = xyz(xyz(:,4)==0, :);
-                    scatter3(xyz_zero(:,1), xyz_zero(:,2), xyz_zero(:,3), 10, (xyz_zero(:,4)),'w', 'filled');
-                    hold off;
                     
                     
                     %plot range and azimuth heatmap
                     subplot(2,3,6)%绘制静态目标，range和azimuth热力图
-                    mode = 'static';%mode: 'static'/'dynamic'/'static+dynamic'
+                    mode = 'dynamic';%mode: 'static'/'dynamic'/'static+dynamic'
                     minRangeBinKeep =  5;
                     rightRangeBinDiscard =  20;
                     LOG_ON = 1;

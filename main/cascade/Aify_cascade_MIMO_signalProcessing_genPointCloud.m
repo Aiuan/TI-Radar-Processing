@@ -18,7 +18,7 @@ dataPlatform = 'TDA2';
 %input文件夹目录
 input_path = strcat(pwd,'\input\');
 %描述待处理数据文件目录
-testList = strcat(input_path,'testList.txt');
+testList = strcat(input_path,'testList_genPointCloud.txt');
 %打开testList.txt文件
 fidList = fopen(testList,'r');
 %生成雷达参数文件的编号

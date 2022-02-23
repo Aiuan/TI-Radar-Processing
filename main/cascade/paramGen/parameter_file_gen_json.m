@@ -114,11 +114,8 @@ else
     fprintf(fidParam, 'framePeriodicty = %d; \n', params_chirp.DevConfig(1).FrameConfig.Periodicity * 1e-3);
     fprintf(fidParam, 'NumDevices = %d; \n', params_chirp.NumDevices);
     fprintf(fidParam, 'framePeriodicty = %d; \n', params_chirp.DevConfig(1).FrameConfig.Periodicity * 1e-3);
-
     fprintf(fidParam, 'frameCount = %e; %%s \n', params_chirp.DevConfig(1).FrameConfig.NumFrames); 
-    fprintf(fidParam, 'numChirpsInLoop = %e; %%s \n', params_chirp.DevConfig(1).NumChirps);        
-
-        
+    fprintf(fidParam, 'numChirpsInLoop = %e; %%s \n', params_chirp.DevConfig(1).NumChirps);                
     fprintf(fidParam, 'nchirp_loops = %d; \n', params_chirp.DevConfig(1).FrameConfig.NumChirpLoops);
         
     fprintf(fidParam, 'numTxAnt = %d; \n', length(params_chirp.TxToEnable));   

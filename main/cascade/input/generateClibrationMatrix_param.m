@@ -33,20 +33,20 @@
 
 dataPlatform = 'TDA2'; 
 %pass the chirp parameters associated with test data 
-numADCSample = 2.560000e+02; 
-adcSampleRate = 2.250000e+07; %Hz/s 
+numADCSample = 5.120000e+02; 
+adcSampleRate = 2.000000e+07; %Hz/s 
 startFreqConst = 7.700000e+10; %Hz 
-chirpSlope = 4.200300e+13; %Hz/s 
-chirpIdleTime = 2.000000e-06; %s 
-adcStartTimeConst = 2.720000e-06; %s 
-chirpRampEndTime = 1.432000e-05; %s 
+chirpSlope = 6.001200e+13; %Hz/s 
+chirpIdleTime = 3.500000e-06; %s 
+adcStartTimeConst = 4.210000e-06; %s 
+chirpRampEndTime = 3.006000e-05; %s 
 framePeriodicty = 1.000000e-01; 
 NumDevices = 4; 
 numTxAnt = 12; 
-nchirp_loops = 64; 
+nchirp_loops = 128; 
 TxToEnable = [12  11  10   9   8   7   6   5   4   3   2   1];
 numRxToEnable = 16; 
-centerFreq = 7.723895e+01; 
+centerFreq = 7.776815e+01; 
 %pass all other parameters 
 
 % moudle_param_antennaCalib.m

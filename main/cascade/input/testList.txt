@@ -1,3 +1,0 @@
-K:\ourDataset\20210715\radar\mode1Group1
-./input/20210715.mat
-./paramGen/module_param.m

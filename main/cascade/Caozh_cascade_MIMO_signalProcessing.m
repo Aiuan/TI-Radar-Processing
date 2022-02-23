@@ -2,18 +2,10 @@ clearvars
 % close all;
 clc;
 
-%处理结果是否需要画图展示
-PLOT_ON = 1; % 1: turn plot on; 0: turn plot off
-%处理结果展示是否采用对数坐标
-LOG_ON = 1; % 1: log10 scale; 0: linear scale
 %运行帧数
-numFrames_toRun = 1; %number of frame to run, can be less than the frame saved in the raw data
-%数据处理结果是否保存
-SAVEOUTPUT_ON = 0;
+numFrames_toRun = 1; 
 %是否根据原始数据文件夹中的config.mmwave.json文件重新生成参数文件
 PARAM_FILE_GEN_ON = 1;
-%绘制热力图
-DISPLAY_RANGE_AZIMUTH_DYNAMIC_HEATMAP = 0 ; % Will make things slower
 %数据平台类型
 dataPlatform = 'TDA2';
 
@@ -61,7 +53,8 @@ while ~feof(fidList)%如果test.List文件不为空
     calibrationObj      = calibrationCascade('pfile', pathGenParaFile, 'calibrationfilePath', dataFolder_calib);
     rangeFFTObj         = rangeProcCascade('pfile', pathGenParaFile);%内含如何对数据进行rangeFFT处理
     DopplerFFTObj       = DopplerProcClutterRemove('pfile', pathGenParaFile);%内含如何对数据进行DopplerFFT处理
-    detectionObj        = CFAR_CASO('pfile', pathGenParaFile);%内含通过angleFFT 和 CFAR算法的detection结果
+    detectionObj        = CFAR_OS('pfile', pathGenParaFile);%CFAR_OS算法
+    % detectionObj        = CFAR_CASO('pfile', pathGenParaFile);%内含通过angleFFT 和 CFAR算法的detection结果
     DOAObj              = DOACascade('pfile', pathGenParaFile);
     
     % get system level variables
@@ -109,7 +102,8 @@ while ~feof(fidList)%如果test.List文件不为空
             tic;
             % RX Channel re-ordering
             adcData = adcData(:,:,calibrationObj.RxForMIMOProcess,:); %根据chirp的发射顺序，重新排列天线编号           
-            Azimuth_Heatmap_Exp(adcData);
+%             Azimuth_Heatmap_Exp(adcData);
+            Azimuth_Heatmap_Exp50m(adcData);
             
           
         end%逐帧处理循环结束        

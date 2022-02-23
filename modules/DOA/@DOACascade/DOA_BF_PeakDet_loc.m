@@ -153,6 +153,7 @@ for ind = 1:numMax
     peakVal(ind) = maxData(ind,2);
     peakLoc(ind) = rem(maxData(ind,1)-1, N)+1;
 end
+end
 
 
 

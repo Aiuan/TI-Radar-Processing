@@ -50,7 +50,7 @@ dataPlatform = 'TDA2';
 
 % dataFolder_calib_data = '.\main\cascade\testVector\test1\';
 %校准数据路径
-dataFolder_calib_data = 'D:\ti\mmwave_studio_03_00_00_14\mmWaveStudio\PostProc\mode1Calib1';
+dataFolder_calib_data = 'D:\ti\mmwave_studio_03_00_00_14\mmWaveStudio\PostProc\seaTest_50m_calib1';
 targetRange = 5; %target aproximate distance for local maximum search
 
 %parameter file name for the test
@@ -78,7 +78,7 @@ end
 %calibrateValFileNameSave: file name to save calibration results. This file
 %will be saved in "dataFolder_calib" after running calibration
 %保存参数mat名称
-calibrateValFileNameSave =[input_path '\20210715mode1.mat'];
+calibrateValFileNameSave =[input_path '\20210927_seaTest_50m.mat'];
 
 %use second frame for calibration 
 genCalibrationMatrixObj.frameIdx = 2;

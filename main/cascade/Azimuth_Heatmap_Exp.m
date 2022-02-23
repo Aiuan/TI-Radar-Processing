@@ -19,9 +19,18 @@ AngleFFT = fftshift(AngleFFT,2);
 
 vxData_Sum = sum(vxData(:,:,1:end),3);
 vxData_Sum = sum(vxData_Sum(:,1:end),2);
+
+figure(1);
+hold on;
+plot(([0 :n_range_fft_size- 1].*range_resolution)',abs(fft(vxData_Sum)));
+xlabel('range/m');
+grid on;
+hold off;
+
 figure()
 subplot(211)
 plot(([0 :n_range_fft_size- 1].*range_resolution)',abs(fft(vxData_Sum)));
+xlabel('range/m');
 
 indices_1D = (minRangeBinKeep:n_range_fft_size - rightRangeBinDiscard);
 sine_theta = -2 * ((-n_angle_fft_size / 2:n_angle_fft_size / 2) / n_angle_fft_size) / d;
@@ -35,6 +44,7 @@ y_axis = R_mat .* sine_theta_mat;
 mag_data = squeeze(abs(AngleFFT(indices_1D + 1, [1:end, 1])));
 mag_data = mag_data';
 mag_data = flipud(mag_data);
+title('rangeFFT')
 subplot(212)
 surf(y_axis, x_axis, 20*log10(mag_data), 'EdgeColor', 'none');
 caxis([min(min(abs(20*log10(mag_data))))+50, max(max(abs(20*log10(mag_data))))]);
@@ -43,7 +53,8 @@ view(2);
 xlabel('meters')
 ylabel('meters')
 colormap('jet')
-set(gcf,'unit','centimeters','position',[1,2,25,40])
+set(gcf,'units', 'normalized', 'position',[0.1,0.1,0.5,0.8]);
 colorbar;
+title('range-azimuth')
 
 end

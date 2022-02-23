@@ -54,7 +54,7 @@ centerFreq = 7.853631e+01;
 %pass the slope used for calibration 
 Slope_calib = 60012000000000; 
 
-fs_calib = 10000000; 
+fs_calib = 20000000; 
 
 %pass all other parameters 
 

@@ -189,3 +189,32 @@ DOA结果在294行
 
 ![28](figures/28.png)
 
+## Caozh_cascade_MIMO_signalProcessing.m使用说明
+
+### 自定义修改部分
+
+- 根据需求，修改"$code/main/cascade/Caozh_cascade_MIMO_signalProcessing.m"文件中第5-8行
+
+  ![30](figures/30.png)
+
+- 修改"$code/main/cascade/Caozh_cascade_MIMO_signalProcessing.m"文件中第14行，调整为"$code"，例如：
+
+  ![31](figures/31.png)
+
+- 根据"$code/main/cascade/Caozh_cascade_MIMO_signalProcessing.m"文件中第18行所指文件，如下图所示，为"$code/main/cascade/input/testList_caozh.txt"文件
+
+  ![32](figures/32.png)
+
+  因此，修改"$code/main/cascade/input/testList_caozh.txt"文件，分别指定输入雷达原始数据文件夹路径（需修改）、校准mat文件（大多数情况下默认即可，当采样点数发生变化时才需要重新校准）、模板文件（默认即可），如下图所示：
+
+  ![29](figures/29.png)
+
+- 点击运行按钮，即可运行程序。
+
+  figure 1为rangeFFT图，plot一直处于hold on状态（使得不同组数据的rangeFFT曲线，可以绘制在一张图上），便于观察衰减情况
+
+  ![34](figures/34.png)
+
+  查看rangeFFT图与range-azimuth图
+
+  ![33](figures/33.png)
